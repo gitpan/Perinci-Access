@@ -1,0 +1,97 @@
+NAME
+    Perinci::Access - Wrapper for Perinci Riap clients
+
+VERSION
+    version 0.28
+
+SYNOPSIS
+     use Perinci::Access;
+
+     my $pa = Perinci::Access->new;
+     my $res;
+
+     # use Perinci::Access::InProcess
+     $res = $pa->request(call => "pl:/Mod/SubMod/func");
+
+     # ditto
+     $res = $pa->request(call => "/Mod/SubMod/func");
+
+     # use Perinci::Access::HTTP::Client
+     $res = $pa->request(info => "http://example.com/Sub/ModSub/func",
+                         {uri=>'/Sub/ModSub/func'});
+
+     # use Perinci::Access::Simple::Client
+     $res = $pa->request(meta => "riap+tcp://localhost:7001/Sub/ModSub/");
+
+     # dies, unknown scheme
+     $res = $pa->request(call => "baz://example.com/Sub/ModSub/");
+
+DESCRIPTION
+    This module provides a convenient wrapper to select appropriate Riap
+    client (Perinci::Access::*) objects based on URI scheme (or lack
+    thereof).
+
+     riap://perl/Foo/Bar/  -> InProcess
+     /Foo/Bar/             -> InProcess
+     pl:/Foo/Bar           -> InProcess
+     http://...            -> HTTP::Client
+     https://...           -> HTTP::Client
+     riap+tcp://...        -> Simple::Client
+     riap+unix://...       -> Simple::Client
+     riap+pipe://...       -> Simple::Client
+
+    You can customize or add supported schemes by providing class name or
+    object to the handlers attribute (see its documentation for more
+    details).
+
+VARIABLES
+  $Log_Requests (BOOL)
+    Whether to log every Riap request. Default is from environment variable
+    LOG_RIAP_REQUESTS, or false. Logging is done with Log::Any at trace
+    level.
+
+  $Log_Responses (BOOL)
+    Whether to log every Riap response. Default is from environment variable
+    LOG_RIAP_RESPONSES, or false. Logging is done with Log::Any at trace
+    level.
+
+METHODS
+  new(%opts) -> OBJ
+    Create new instance. Known options:
+
+    *   handlers (HASH)
+
+        A mapping of scheme names and class names or objects. If values are
+        class names, they will be require'd and instantiated. The default
+        is:
+
+         {
+           riap         => 'Perinci::Access::InProcess',
+           pl           => 'Perinci::Access::InProcess',
+           http         => 'Perinci::Access::HTTP::Client',
+           https        => 'Perinci::Access::HTTP::Client',
+           'riap+tcp'   => 'Perinci::Access::Simple::Client',
+           'riap+unix'  => 'Perinci::Access::Simple::Client',
+           'riap+pipe'  => 'Perinci::Access::Simple::Client',
+         }
+
+        Objects can be given instead of class names. This is used if you
+        need to pass special options when instantiating the class.
+
+  $pa->request($action, $server_url, \%extra) -> RESP
+    Send Riap request to Riap server. Pass the request to the appropriate
+    Riap client (as configured in "handlers" constructor options). RESP is
+    the enveloped result.
+
+SEE ALSO
+    Perinci, Riap
+
+AUTHOR
+    Steven Haryanto <stevenharyanto@gmail.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2012 by Steven Haryanto.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
