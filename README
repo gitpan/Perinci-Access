@@ -2,7 +2,7 @@ NAME
     Perinci::Access - Wrapper for Perinci Riap clients
 
 VERSION
-    version 0.28
+    version 0.29
 
 SYNOPSIS
      use Perinci::Access;
@@ -45,14 +45,14 @@ DESCRIPTION
     details).
 
 VARIABLES
-  $Log_Requests (BOOL)
+  $Log_Request (BOOL)
     Whether to log every Riap request. Default is from environment variable
-    LOG_RIAP_REQUESTS, or false. Logging is done with Log::Any at trace
+    LOG_RIAP_REQUEST, or false. Logging is done with Log::Any at trace
     level.
 
-  $Log_Responses (BOOL)
+  $Log_Response (BOOL)
     Whether to log every Riap response. Default is from environment variable
-    LOG_RIAP_RESPONSES, or false. Logging is done with Log::Any at trace
+    LOG_RIAP_RESPONSE, or false. Logging is done with Log::Any at trace
     level.
 
 METHODS
@@ -83,8 +83,17 @@ METHODS
     Riap client (as configured in "handlers" constructor options). RESP is
     the enveloped result.
 
+ENVIRONMENT
+    LOG_RIAP_REQUEST
+
+    LOG_RIAP_RESPONSE
+
 SEE ALSO
-    Perinci, Riap
+    Perinci::Access::InProcess
+
+    Perinci::Access::HTTP::Client
+
+    Perinci::Access::Simple::Client
 
 AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>

@@ -1,6 +1,15 @@
 Revision history for Perinci-Access
 
-0.28     2012-08-10 (SHARYANTO) (not yet released)
+0.29     2012-08-16 (SHARYANTO)
+
+         [INCOMPATIBLE CHANGES]
+
+         Rename logging variable/environment name (singular, convention):
+         $Log_Response{s,}, $Log_Request{s,}, LOG_RIAP_REQUEST{S,},
+         LOG_RIAP_RESPONSE{S,}.
+
+
+0.28     2012-08-10 (SHARYANTO)
 
          First release, split to make Perinci dist empty (that dist was a
          growing mixed bag and caused headache in dependencies).

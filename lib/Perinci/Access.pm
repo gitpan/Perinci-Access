@@ -8,10 +8,10 @@ use Log::Any '$log';
 use Scalar::Util qw(blessed);
 use URI;
 
-our $Log_Requests  = $ENV{LOG_RIAP_REQUESTS}  // 0;
-our $Log_Responses = $ENV{LOG_RIAP_RESPONSES} // 0;
+our $Log_Request  = $ENV{LOG_RIAP_REQUEST}  // 0;
+our $Log_Response = $ENV{LOG_RIAP_RESPONSE} // 0;
 
-our $VERSION = '0.28'; # VERSION
+our $VERSION = '0.29'; # VERSION
 
 sub new {
     my ($class, %opts) = @_;
@@ -88,13 +88,13 @@ sub request {
         }
     }
 
-    if ($Log_Requests && $log->is_trace) {
+    if ($Log_Request && $log->is_trace) {
         $log->tracef(
             "Riap request (%s): %s -> %s (%s)",
             ref($self->{_handler_objs}{$sch}), $action, "$uri", $extra);
     }
     my $res = $self->{_handler_objs}{$sch}->request($action, $uri, $extra);
-    if ($Log_Responses && $log->is_trace) {
+    if ($Log_Response && $log->is_trace) {
         $log->tracef("Riap response: %s", $res);
     }
     $res;
@@ -113,7 +113,7 @@ Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-version 0.28
+version 0.29
 
 =head1 SYNOPSIS
 
@@ -157,15 +157,15 @@ the B<handlers> attribute (see its documentation for more details).
 
 =head1 VARIABLES
 
-=head2 $Log_Requests (BOOL)
+=head2 $Log_Request (BOOL)
 
 Whether to log every Riap request. Default is from environment variable
-LOG_RIAP_REQUESTS, or false. Logging is done with L<Log::Any> at trace level.
+LOG_RIAP_REQUEST, or false. Logging is done with L<Log::Any> at trace level.
 
-=head2 $Log_Responses (BOOL)
+=head2 $Log_Response (BOOL)
 
 Whether to log every Riap response. Default is from environment variable
-LOG_RIAP_RESPONSES, or false. Logging is done with L<Log::Any> at trace level.
+LOG_RIAP_RESPONSE, or false. Logging is done with L<Log::Any> at trace level.
 
 =head1 METHODS
 
@@ -201,9 +201,19 @@ Send Riap request to Riap server. Pass the request to the appropriate Riap
 client (as configured in C<handlers> constructor options). RESP is the enveloped
 result.
 
+=head1 ENVIRONMENT
+
+LOG_RIAP_REQUEST
+
+LOG_RIAP_RESPONSE
+
 =head1 SEE ALSO
 
-L<Perinci>, L<Riap>
+L<Perinci::Access::InProcess>
+
+L<Perinci::Access::HTTP::Client>
+
+L<Perinci::Access::Simple::Client>
 
 =head1 AUTHOR
 
