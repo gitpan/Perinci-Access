@@ -2,7 +2,7 @@ NAME
     Perinci::Access - Wrapper for Perinci Riap clients
 
 VERSION
-    version 0.30
+    version 0.31
 
 SYNOPSIS
      use Perinci::Access;
@@ -59,7 +59,7 @@ METHODS
   new(%opts) -> OBJ
     Create new instance. Known options:
 
-    *   handlers (HASH)
+    *   handlers => HASH
 
         A mapping of scheme names and class names or objects. If values are
         class names, they will be require'd and instantiated. The default
@@ -77,6 +77,10 @@ METHODS
 
         Objects can be given instead of class names. This is used if you
         need to pass special options when instantiating the class.
+
+    *   handler_args => HASH
+
+        Arguments to pass to handler objects' constructors.
 
   $pa->request($action, $server_url, \%extra, \%copts) -> RESP
     Send Riap request to Riap server. Pass the request to the appropriate

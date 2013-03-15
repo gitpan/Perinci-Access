@@ -1,5 +1,14 @@
 Revision history for Perinci-Access
 
+0.31     2013-03-15 (SHARYANTO)
+
+         Add attribute 'handler_args' to pass arguments to Riap client's
+         constructors. Needed if you want to use, e.g.
+         Perinci::Access::HTTP::Client 0.06+ which expects 'user' and 'password'
+         arguments passed to its constructor if you want to do HTTP basic
+         authentication.
+
+
 0.30     2013-03-15 (SHARYANTO)
 
          No functional changes. Upgrade dep version.

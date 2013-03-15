@@ -11,7 +11,7 @@ use URI;
 our $Log_Request  = $ENV{LOG_RIAP_REQUEST}  // 0;
 our $Log_Response = $ENV{LOG_RIAP_RESPONSE} // 0;
 
-our $VERSION = '0.30'; # VERSION
+our $VERSION = '0.31'; # VERSION
 
 sub new {
     my ($class, %opts) = @_;
@@ -84,7 +84,9 @@ sub request {
             my $modp = $self->{handlers}{$sch};
             $modp =~ s!::!/!g; $modp .= ".pm";
             require $modp;
-            $self->{_handler_objs}{$sch} = $self->{handlers}{$sch}->new;
+            $log->tracef("TMP: Creating Riap client object for schema %s with args %s", $sch, $self->{handler_args});
+            $self->{_handler_objs}{$sch} = $self->{handlers}{$sch}->new(
+                %{ $self->{handler_args} // {}});
         }
     }
 
@@ -113,7 +115,7 @@ Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =head1 SYNOPSIS
 
@@ -175,7 +177,7 @@ Create new instance. Known options:
 
 =over 4
 
-=item * handlers (HASH)
+=item * handlers => HASH
 
 A mapping of scheme names and class names or objects. If values are class names,
 they will be require'd and instantiated. The default is:
@@ -192,6 +194,10 @@ they will be require'd and instantiated. The default is:
 
 Objects can be given instead of class names. This is used if you need to pass
 special options when instantiating the class.
+
+=item * handler_args => HASH
+
+Arguments to pass to handler objects' constructors.
 
 =back
 
