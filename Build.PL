@@ -19,14 +19,14 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Perinci-Access",
-  "dist_version" => "0.29",
+  "dist_version" => "0.30",
   "license" => "perl",
   "module_name" => "Perinci::Access",
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
     "Log::Any" => 0,
-    "Perinci::Access::HTTP::Client" => 0,
+    "Perinci::Access::HTTP::Client" => "0.06",
     "Perinci::Access::InProcess" => 0,
     "Perinci::Access::Simple::Client" => 0,
     "URI" => 0,

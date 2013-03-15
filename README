@@ -2,7 +2,7 @@ NAME
     Perinci::Access - Wrapper for Perinci Riap clients
 
 VERSION
-    version 0.29
+    version 0.30
 
 SYNOPSIS
      use Perinci::Access;
@@ -78,10 +78,20 @@ METHODS
         Objects can be given instead of class names. This is used if you
         need to pass special options when instantiating the class.
 
-  $pa->request($action, $server_url, \%extra) -> RESP
+  $pa->request($action, $server_url, \%extra, \%copts) -> RESP
     Send Riap request to Riap server. Pass the request to the appropriate
     Riap client (as configured in "handlers" constructor options). RESP is
     the enveloped result.
+
+    %extra is optional, containing Riap request keys (the "action" request
+    key is taken from $action).
+
+    %copts is optional, containing Riap-client-specific options. For
+    example, to pass HTTP credentials to "Perinci::Access::HTTP::Client",
+    you can do:
+
+     $pa->request(call => 'http://example.com/Foo/bar', {args=>{a=>1}},
+                  {user=>'admin', password=>'secret'});
 
 ENVIRONMENT
     LOG_RIAP_REQUEST
@@ -99,7 +109,7 @@ AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2012 by Steven Haryanto.
+    This software is copyright (c) 2013 by Steven Haryanto.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

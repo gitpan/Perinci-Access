@@ -1,6 +1,6 @@
 package Perinci::Access;
 
-use 5.010;
+use 5.010001;
 use strict;
 use warnings;
 use Log::Any '$log';
@@ -11,7 +11,7 @@ use URI;
 our $Log_Request  = $ENV{LOG_RIAP_REQUEST}  // 0;
 our $Log_Response = $ENV{LOG_RIAP_RESPONSE} // 0;
 
-our $VERSION = '0.29'; # VERSION
+our $VERSION = '0.30'; # VERSION
 
 sub new {
     my ($class, %opts) = @_;
@@ -59,7 +59,7 @@ sub _normalize_uri {
 }
 
 sub request {
-    my ($self, $action, $uri, $extra) = @_;
+    my ($self, $action, $uri, $extra, $copts) = @_;
 
     $uri = $self->_normalize_uri($uri);
     my $sch = $uri->scheme;
@@ -91,9 +91,9 @@ sub request {
     if ($Log_Request && $log->is_trace) {
         $log->tracef(
             "Riap request (%s): %s -> %s (%s)",
-            ref($self->{_handler_objs}{$sch}), $action, "$uri", $extra);
+            ref($self->{_handler_objs}{$sch}), $action, "$uri", $extra, $copts);
     }
-    my $res = $self->{_handler_objs}{$sch}->request($action, $uri, $extra);
+    my $res = $self->{_handler_objs}{$sch}->request($action,$uri,$extra,$copts);
     if ($Log_Response && $log->is_trace) {
         $log->tracef("Riap response: %s", $res);
     }
@@ -113,7 +113,7 @@ Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-version 0.29
+version 0.30
 
 =head1 SYNOPSIS
 
@@ -195,11 +195,20 @@ special options when instantiating the class.
 
 =back
 
-=head2 $pa->request($action, $server_url, \%extra) -> RESP
+=head2 $pa->request($action, $server_url, \%extra, \%copts) -> RESP
 
 Send Riap request to Riap server. Pass the request to the appropriate Riap
 client (as configured in C<handlers> constructor options). RESP is the enveloped
 result.
+
+C<%extra> is optional, containing Riap request keys (the C<action> request key
+ is taken from C<$action>).
+
+C<%copts> is optional, containing Riap-client-specific options. For example, to
+pass HTTP credentials to C<Perinci::Access::HTTP::Client>, you can do:
+
+ $pa->request(call => 'http://example.com/Foo/bar', {args=>{a=>1}},
+              {user=>'admin', password=>'secret'});
 
 =head1 ENVIRONMENT
 
@@ -221,7 +230,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Steven Haryanto.
+This software is copyright (c) 2013 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
