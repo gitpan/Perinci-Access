@@ -11,7 +11,7 @@ use URI;
 our $Log_Request  = $ENV{LOG_RIAP_REQUEST}  // 0;
 our $Log_Response = $ENV{LOG_RIAP_RESPONSE} // 0;
 
-our $VERSION = '0.31'; # VERSION
+our $VERSION = '0.32'; # VERSION
 
 sub new {
     my ($class, %opts) = @_;
@@ -84,7 +84,7 @@ sub request {
             my $modp = $self->{handlers}{$sch};
             $modp =~ s!::!/!g; $modp .= ".pm";
             require $modp;
-            $log->tracef("TMP: Creating Riap client object for schema %s with args %s", $sch, $self->{handler_args});
+            #$log->tracef("TMP: Creating Riap client object for schema %s with args %s", $sch, $self->{handler_args});
             $self->{_handler_objs}{$sch} = $self->{handlers}{$sch}->new(
                 %{ $self->{handler_args} // {}});
         }
@@ -105,8 +105,8 @@ sub request {
 1;
 # ABSTRACT: Wrapper for Perinci Riap clients
 
-
 __END__
+
 =pod
 
 =head1 NAME
@@ -115,7 +115,7 @@ Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-version 0.31
+version 0.32
 
 =head1 SYNOPSIS
 
@@ -145,14 +145,16 @@ version 0.31
 This module provides a convenient wrapper to select appropriate Riap client
 (Perinci::Access::*) objects based on URI scheme (or lack thereof).
 
- riap://perl/Foo/Bar/  -> InProcess
- /Foo/Bar/             -> InProcess
- pl:/Foo/Bar           -> InProcess
- http://...            -> HTTP::Client
- https://...           -> HTTP::Client
- riap+tcp://...        -> Simple::Client
- riap+unix://...       -> Simple::Client
- riap+pipe://...       -> Simple::Client
+ riap://perl/Foo/Bar/  -> Perinci::Access::InProcess
+ /Foo/Bar/             -> Perinci::Access::InProcess
+ pl:/Foo/Bar           -> Perinci::Access::InProcess
+ http://...            -> Perinci::Access::HTTP::Client
+ https://...           -> Perinci::Access::HTTP::Client
+ riap+tcp://...        -> Perinci::Access::Simple::Client
+ riap+unix://...       -> Perinci::Access::Simple::Client
+ riap+pipe://...       -> Perinci::Access::Simple::Client
+
+For more details on each scheme, please consult the appropriate module.
 
 You can customize or add supported schemes by providing class name or object to
 the B<handlers> attribute (see its documentation for more details).
@@ -242,4 +244,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

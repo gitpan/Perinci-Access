@@ -1,5 +1,10 @@
 Revision history for Perinci-Access
 
+0.32     2013-07-26 (SHARYANTO)
+
+         - Add command-line Riap client: peri-access.
+
+
 0.31     2013-03-15 (SHARYANTO)
 
          Add attribute 'handler_args' to pass arguments to Riap client's

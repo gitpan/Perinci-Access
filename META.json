@@ -4,7 +4,7 @@
       "Steven Haryanto <stevenharyanto@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300028, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Dist::Zilla version 4.300035, CPAN::Meta::Converter version 2.131560",
    "license" : [
       "perl_5"
    ],
@@ -56,6 +56,6 @@
          "url" : "http://github.com/sharyanto/perl-Perinci-Access"
       }
    },
-   "version" : "0.31"
+   "version" : "0.32"
 }
 

@@ -6,6 +6,7 @@ MANIFEST.SKIP
 META.json
 META.yml
 README
+bin/peri-access
 dist.ini
 lib/Perinci/Access.pm
 t/00-compile.t
