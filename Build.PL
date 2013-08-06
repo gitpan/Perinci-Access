@@ -17,7 +17,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Perinci-Access",
-  "dist_version" => "0.32",
+  "dist_version" => "0.33",
   "license" => "perl",
   "module_name" => "Perinci::Access",
   "recommends" => {},

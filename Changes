@@ -1,5 +1,10 @@
 Revision history for Perinci-Access
 
+0.33     2013-08-06 (SHARYANTO)
+
+         - peri-access: Add --detail.
+
+
 0.32     2013-07-26 (SHARYANTO)
 
          - Add command-line Riap client: peri-access.
@@ -7,28 +12,28 @@ Revision history for Perinci-Access
 
 0.31     2013-03-15 (SHARYANTO)
 
-         Add attribute 'handler_args' to pass arguments to Riap client's
-         constructors. Needed if you want to use, e.g.
-         Perinci::Access::HTTP::Client 0.06+ which expects 'user' and 'password'
-         arguments passed to its constructor if you want to do HTTP basic
-         authentication.
+         - Add attribute 'handler_args' to pass arguments to Riap client's
+           constructors. Needed if you want to use, e.g.
+           Perinci::Access::HTTP::Client 0.06+ which expects 'user' and
+           'password' arguments passed to its constructor if you want to do HTTP
+           basic authentication.
 
 
 0.30     2013-03-15 (SHARYANTO)
 
-         No functional changes. Upgrade dep version.
+         - No functional changes. Upgrade dep version.
 
 
 0.29     2012-08-16 (SHARYANTO)
 
          [INCOMPATIBLE CHANGES]
 
-         Rename logging variable/environment name (singular, convention):
-         $Log_Response{s,}, $Log_Request{s,}, LOG_RIAP_REQUEST{S,},
-         LOG_RIAP_RESPONSE{S,}.
+         - Rename logging variable/environment name (singular, convention):
+           $Log_Response{s,}, $Log_Request{s,}, LOG_RIAP_REQUEST{S,},
+           LOG_RIAP_RESPONSE{S,}.
 
 
 0.28     2012-08-10 (SHARYANTO)
 
-         First release, split to make Perinci dist empty (that dist was a
-         growing mixed bag and caused headache in dependencies).
+         - First release, split to make Perinci dist empty (that dist was a
+           growing mixed bag and caused headache in dependencies).

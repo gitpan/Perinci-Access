@@ -25,4 +25,4 @@ requires:
 resources:
   homepage: http://metacpan.org/release/Perinci-Access
   repository: http://github.com/sharyanto/perl-Perinci-Access
-version: 0.32
+version: 0.33

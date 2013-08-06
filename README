@@ -2,7 +2,7 @@ NAME
     Perinci::Access - Wrapper for Perinci Riap clients
 
 VERSION
-    version 0.32
+    version 0.33
 
 SYNOPSIS
      use Perinci::Access;

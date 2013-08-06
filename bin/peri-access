@@ -4,7 +4,7 @@ use 5.010;
 use strict;
 use warnings;
 
-our $VERSION = '0.32'; # VERSION
+our $VERSION = '0.33'; # VERSION
 
 # we do this because we can't state Perinci::CmdLine as prerequisite, circular
 eval { require Perinci::CmdLine };
@@ -62,10 +62,19 @@ _
             summary => "Specify Riap request key 'args'",
             description => <<'_',
 
-Can also be specified through declaring `args` key in `extras` hash.
+Can also be specified through declaring `args` key in `extra` hash.
 
 _
             schema => 'hash*',
+        },
+        detail => {
+            summary => "Set Riap request key 'detail' => 1",
+            description => <<'_',
+
+Can also be specified through declaring `detail` key in `extra` hash.
+
+_
+            schema => 'bool',
         },
     },
 };
@@ -82,6 +91,9 @@ sub request_riap {
         for (keys %{$args{extra}}) {
             $extra->{$_} = $args{extra}{$_};
         }
+    }
+    if ($args{detail}) {
+        $extra->{detail} //= 1;
     }
     if ($args{args}) {
         $extra->{args} //= {};
@@ -115,7 +127,7 @@ peri-access - Command-line Riap client
 
 =head1 VERSION
 
-version 0.32
+version 0.33
 
 =head1 SYNOPSIS
 
