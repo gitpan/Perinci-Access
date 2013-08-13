@@ -11,7 +11,7 @@ use URI;
 our $Log_Request  = $ENV{LOG_RIAP_REQUEST}  // 0;
 our $Log_Response = $ENV{LOG_RIAP_RESPONSE} // 0;
 
-our $VERSION = '0.33'; # VERSION
+our $VERSION = '0.34'; # VERSION
 
 sub new {
     my ($class, %opts) = @_;
@@ -58,8 +58,16 @@ sub _normalize_uri {
     }
 }
 
-sub request {
-    my ($self, $action, $uri, $extra, $copts) = @_;
+sub _request_or_parse_url {
+    my $self = shift;
+    my $which = shift;
+
+    my ($action, $uri, $extra, $copts);
+    if ($which eq 'request') {
+        ($action, $uri, $extra, $copts) = @_;
+    } else {
+        ($uri) = @_;
+    }
 
     $uri = $self->_normalize_uri($uri);
     my $sch = $uri->scheme;
@@ -90,16 +98,33 @@ sub request {
         }
     }
 
-    if ($Log_Request && $log->is_trace) {
-        $log->tracef(
-            "Riap request (%s): %s -> %s (%s)",
-            ref($self->{_handler_objs}{$sch}), $action, "$uri", $extra, $copts);
-    }
-    my $res = $self->{_handler_objs}{$sch}->request($action,$uri,$extra,$copts);
-    if ($Log_Response && $log->is_trace) {
-        $log->tracef("Riap response: %s", $res);
+    my $res;
+    if ($which eq 'request') {
+        if ($Log_Request && $log->is_trace) {
+            $log->tracef(
+                "Riap request (%s): %s -> %s (%s)",
+                ref($self->{_handler_objs}{$sch}),
+                $action, "$uri", $extra, $copts);
+        }
+        $res = $self->{_handler_objs}{$sch}->request(
+            $action, $uri, $extra, $copts);
+        if ($Log_Response && $log->is_trace) {
+            $log->tracef("Riap response: %s", $res);
+        }
+    } else {
+        $res = $self->{_handler_objs}{$sch}->parse_url($uri);
     }
     $res;
+}
+
+sub request {
+    my $self = shift;
+    $self->_request_or_parse_url('request', @_);
+}
+
+sub parse_url {
+    my $self = shift;
+    $self->_request_or_parse_url('parse_url', @_);
 }
 
 1;
@@ -115,7 +140,7 @@ Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-version 0.33
+version 0.34
 
 =head1 SYNOPSIS
 
@@ -123,6 +148,8 @@ version 0.33
 
  my $pa = Perinci::Access->new;
  my $res;
+
+ ### launching Riap request
 
  # use Perinci::Access::InProcess
  $res = $pa->request(call => "pl:/Mod/SubMod/func");
@@ -139,6 +166,14 @@ version 0.33
 
  # dies, unknown scheme
  $res = $pa->request(call => "baz://example.com/Sub/ModSub/");
+
+ ### parse URI
+
+ $res = $pa->parse_url("/Foo/bar");                              # {proto=>'pl', path=>"/Foo/bar"}
+ $res = $pa->parse_url("pl:/Foo/bar");                           # ditto
+ $res = $pa->parse_url("riap+unix:/var/run/apid.sock//Foo/bar"); # {proto=>'riap+unix', path=>"/Foo/bar", unix_sock_path=>"/var/run/apid.sock"}
+ $res = $pa->parse_url("riap+tcp://localhost:7001/Sub/ModSub/"); # {proto=>'riap+tcp', path=>"/Sub/ModSub/", host=>"localhost", port=>7001}
+ $res = $pa->parse_url("http://cpanlists.org/api/");             # {proto=>'http', path=>"/App/cpanlists/Server/"} # will perform an 'info' Riap request to the server first
 
 =head1 DESCRIPTION
 
@@ -217,6 +252,27 @@ pass HTTP credentials to C<Perinci::Access::HTTP::Client>, you can do:
 
  $pa->request(call => 'http://example.com/Foo/bar', {args=>{a=>1}},
               {user=>'admin', password=>'secret'});
+
+=head2 $pa->parse_url($server_url) => HASH
+
+Parse C<$server_url> into its components. Will be done by respective subclasses.
+Die on failure (e.g. invalid URL). Return a hash on success, containing at least
+these keys:
+
+=over
+
+=item * proto => STR
+
+=item * path => STR
+
+Code entity path. Most URL schemes include the code entity path as part of the
+URL, e.g. C<pl>, C<riap+unix>, C<riap+tcp>, or C<riap+pipe>. Some do not, e.g.
+C<http> and C<https>. For the latter case, an C<info> Riap request will be sent
+to the server first to find out the code entity path .
+
+=back
+
+Subclasses will add other appropriate keys.
 
 =head1 ENVIRONMENT
 

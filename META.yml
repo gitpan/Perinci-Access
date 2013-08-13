@@ -17,12 +17,12 @@ meta-spec:
 name: Perinci-Access
 requires:
   Log::Any: 0
-  Perinci::Access::HTTP::Client: 0.06
-  Perinci::Access::InProcess: 0
-  Perinci::Access::Simple::Client: 0
+  Perinci::Access::HTTP::Client: 0.10
+  Perinci::Access::InProcess: 0.40
+  Perinci::Access::Simple::Client: 0.13
   URI: 0
   perl: 5.010001
 resources:
   homepage: http://metacpan.org/release/Perinci-Access
   repository: http://github.com/sharyanto/perl-Perinci-Access
-version: 0.33
+version: 0.34

@@ -1,5 +1,10 @@
 Revision history for Perinci-Access
 
+0.34     2013-08-13 (SHARYANTO)
+
+         - Add parse_url().
+
+
 0.33     2013-08-06 (SHARYANTO)
 
          - peri-access: Add --detail.

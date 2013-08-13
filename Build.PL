@@ -17,16 +17,16 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Perinci-Access",
-  "dist_version" => "0.33",
+  "dist_version" => "0.34",
   "license" => "perl",
   "module_name" => "Perinci::Access",
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
     "Log::Any" => 0,
-    "Perinci::Access::HTTP::Client" => "0.06",
-    "Perinci::Access::InProcess" => 0,
-    "Perinci::Access::Simple::Client" => 0,
+    "Perinci::Access::HTTP::Client" => "0.10",
+    "Perinci::Access::InProcess" => "0.40",
+    "Perinci::Access::Simple::Client" => "0.13",
     "URI" => 0,
     "perl" => "5.010001"
   },
