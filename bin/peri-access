@@ -4,7 +4,7 @@ use 5.010;
 use strict;
 use warnings;
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 # we do this because we can't state Perinci::CmdLine as prerequisite, circular
 eval { require Perinci::CmdLine };
@@ -127,7 +127,7 @@ peri-access - Command-line Riap client
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 SYNOPSIS
 

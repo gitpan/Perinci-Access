@@ -8,18 +8,7 @@ use Test::More 0.96;
 use Perinci::Access;
 use Perinci::Examples;
 
-subtest "_normalize_uri" => sub {
-    my $pa = Perinci::Access->new;
-    my @normalize_tests = (
-        ["/Foo", "pl:/Foo"],
-        ["pl:/Foo", "pl:/Foo"],
-        ["x:/Foo", "x:/Foo"],
-    );
-    for (@normalize_tests) {
-        is($pa->_normalize_uri($_->[0])."", $_->[1], $_->[0]);
-    }
-};
-
+ok 1;
 done_testing;
 
 sub test_request {

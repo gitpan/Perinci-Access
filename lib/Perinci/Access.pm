@@ -6,12 +6,12 @@ use warnings;
 use Log::Any '$log';
 
 use Scalar::Util qw(blessed);
-use URI;
+use URI::Split qw(uri_split uri_join);
 
 our $Log_Request  = $ENV{LOG_RIAP_REQUEST}  // 0;
 our $Log_Response = $ENV{LOG_RIAP_RESPONSE} // 0;
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 sub new {
     my ($class, %opts) = @_;
@@ -35,29 +35,6 @@ sub new {
     bless \%opts, $class;
 }
 
-# convert URI string into URI object
-sub _normalize_uri {
-    my ($self, $uri) = @_;
-
-    $uri //= "";
-
-    return $uri if blessed($uri);
-    if ($uri =~ /^\w+(::\w+)+$/) {
-        # assume X::Y is a module name
-        my $orig = $uri;
-        $uri =~ s!::!/!g;
-        $uri = "/$uri/";
-
-        #return URI->new("pl:$uri");
-
-        # to avoid mistakes, die instead
-        die "You specified module name '$orig' as Riap URI, ".
-            "please use '$uri' instead";
-    } else {
-        return URI->new(($uri =~ /\A[A-Za-z+-]+:/ ? "" : "pl:") . $uri);
-    }
-}
-
 sub _request_or_parse_url {
     my $self = shift;
     my $which = shift;
@@ -69,20 +46,17 @@ sub _request_or_parse_url {
         ($uri) = @_;
     }
 
-    $uri = $self->_normalize_uri($uri);
-    my $sch = $uri->scheme;
-    die "Unrecognized scheme '$sch' in URL" unless $self->{handlers}{$sch};
+    my ($sch, $auth, $path, $query, $frag) = uri_split($uri);
+    $sch //= "pl";
+    die "Can't handle scheme '$sch' in URL" unless $self->{handlers}{$sch};
 
-    # convert riap:// to pl:/ as InProcess only accepts the later
+    # convert riap:// to / as InProcess only accepts hostless path or pl:/foo
     if ($sch eq 'riap') {
-        print $uri->path;
-        my ($host) = $uri =~ m!//([^/]+)!; # host() not supported, URI::_foreign
-        if ($host =~ /^(?:perl|pl)$/) {
-            $uri = URI->new("pl:" . $uri->path);
-        } else {
-            die "Unsupported host '$host' in riap: scheme, ".
-                "only 'perl' is supported";
-        }
+        $auth //= '';
+        die "Unsupported auth '$auth' in riap: scheme, ".
+            "only 'perl' is supported" unless $auth eq 'perl';
+        $sch = 'pl';
+        $uri = uri_join("pl", undef, $path);
     }
 
     unless ($self->{_handler_objs}{$sch}) {
@@ -104,7 +78,7 @@ sub _request_or_parse_url {
             $log->tracef(
                 "Riap request (%s): %s -> %s (%s)",
                 ref($self->{_handler_objs}{$sch}),
-                $action, "$uri", $extra, $copts);
+                $action, $uri, $extra, $copts);
         }
         $res = $self->{_handler_objs}{$sch}->request(
             $action, $uri, $extra, $copts);
@@ -140,7 +114,7 @@ Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 SYNOPSIS
 

@@ -1,5 +1,11 @@
 Revision history for Perinci-Access
 
+0.35     2013-09-07 (SHARYANTO)
+
+         - Remove use of URI and replace it with URI::Split to make things
+           simpler and a bit faster.
+
+
 0.34     2013-08-13 (SHARYANTO)
 
          - Add parse_url().

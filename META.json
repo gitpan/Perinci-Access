@@ -4,7 +4,7 @@
       "Steven Haryanto <stevenharyanto@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300035, CPAN::Meta::Converter version 2.131560",
+   "generated_by" : "Dist::Zilla version 4.300035, CPAN::Meta::Converter version 2.132140",
    "license" : [
       "perl_5"
    ],
@@ -38,14 +38,17 @@
             "Perinci::Access::HTTP::Client" : "0.10",
             "Perinci::Access::InProcess" : "0.40",
             "Perinci::Access::Simple::Client" : "0.13",
-            "URI" : "0",
+            "URI::Split" : "0",
             "perl" : "5.010001"
          }
       },
       "test" : {
          "requires" : {
+            "Capture::Tiny" : "0",
             "Perinci::Examples" : "0",
-            "Test::More" : "0.96"
+            "Test::More" : "0.96",
+            "Test::Script" : "1.05",
+            "blib" : "0"
          }
       }
    },
@@ -56,6 +59,6 @@
          "url" : "http://github.com/sharyanto/perl-Perinci-Access"
       }
    },
-   "version" : "0.34"
+   "version" : "0.35"
 }
 
