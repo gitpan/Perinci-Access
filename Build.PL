@@ -17,7 +17,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Perinci-Access",
-  "dist_version" => "0.35",
+  "dist_version" => "0.36",
   "license" => "perl",
   "module_name" => "Perinci::Access",
   "recommends" => {},
@@ -25,7 +25,8 @@ my %module_build_args = (
   "requires" => {
     "Log::Any" => 0,
     "Perinci::Access::HTTP::Client" => "0.10",
-    "Perinci::Access::InProcess" => "0.40",
+    "Perinci::Access::Perl" => 0,
+    "Perinci::Access::Schemeless" => 0,
     "Perinci::Access::Simple::Client" => "0.13",
     "URI::Split" => 0,
     "perl" => "5.010001"

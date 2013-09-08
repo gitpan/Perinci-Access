@@ -2,7 +2,7 @@ NAME
     Perinci::Access - Wrapper for Perinci Riap clients
 
 VERSION
-    version 0.35
+    version 0.36
 
 SYNOPSIS
      use Perinci::Access;
@@ -12,10 +12,10 @@ SYNOPSIS
 
      ### launching Riap request
 
-     # use Perinci::Access::InProcess
+     # use Perinci::Access::Perl
      $res = $pa->request(call => "pl:/Mod/SubMod/func");
 
-     # ditto
+     # use Perinci::Access::Schemeless
      $res = $pa->request(call => "/Mod/SubMod/func");
 
      # use Perinci::Access::HTTP::Client
@@ -38,12 +38,11 @@ SYNOPSIS
 
 DESCRIPTION
     This module provides a convenient wrapper to select appropriate Riap
-    client (Perinci::Access::*) objects based on URI scheme (or lack
-    thereof).
+    client (Perinci::Access::*) objects based on URI scheme.
 
-     riap://perl/Foo/Bar/  -> Perinci::Access::InProcess
-     /Foo/Bar/             -> Perinci::Access::InProcess
-     pl:/Foo/Bar           -> Perinci::Access::InProcess
+     /Foo/Bar/             -> Perinci::Access::Schemeless
+     pl:/Foo/Bar           -> Perinci::Access::Perl
+     riap://perl/Foo/Bar/  -> Perinci::Access::Perl (converted to pl:/Foo/Bar/)
      http://...            -> Perinci::Access::HTTP::Client
      https://...           -> Perinci::Access::HTTP::Client
      riap+tcp://...        -> Perinci::Access::Simple::Client
@@ -78,8 +77,8 @@ METHODS
         is:
 
          {
-           riap         => 'Perinci::Access::InProcess',
-           pl           => 'Perinci::Access::InProcess',
+           ''           => 'Perinci::Access::Schemeless',
+           pl           => 'Perinci::Access::Perl',
            http         => 'Perinci::Access::HTTP::Client',
            https        => 'Perinci::Access::HTTP::Client',
            'riap+tcp'   => 'Perinci::Access::Simple::Client',
@@ -132,7 +131,9 @@ ENVIRONMENT
     LOG_RIAP_RESPONSE
 
 SEE ALSO
-    Perinci::Access::InProcess
+    Perinci::Access::Schemeless
+
+    Perinci::Access::Perl
 
     Perinci::Access::HTTP::Client
 

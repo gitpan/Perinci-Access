@@ -11,25 +11,19 @@ use URI::Split qw(uri_split uri_join);
 our $Log_Request  = $ENV{LOG_RIAP_REQUEST}  // 0;
 our $Log_Response = $ENV{LOG_RIAP_RESPONSE} // 0;
 
-our $VERSION = '0.35'; # VERSION
+our $VERSION = '0.36'; # VERSION
 
 sub new {
     my ($class, %opts) = @_;
 
     $opts{handlers}               //= {};
-    $opts{handlers}{riap}         //= 'Perinci::Access::InProcess';
-    $opts{handlers}{pl}           //= 'Perinci::Access::InProcess';
+    $opts{handlers}{''}           //= 'Perinci::Access::Schemeless';
+    $opts{handlers}{pl}           //= 'Perinci::Access::Perl';
     $opts{handlers}{http}         //= 'Perinci::Access::HTTP::Client';
     $opts{handlers}{https}        //= 'Perinci::Access::HTTP::Client';
     $opts{handlers}{'riap+tcp'}   //= 'Perinci::Access::Simple::Client';
     $opts{handlers}{'riap+unix'}  //= 'Perinci::Access::Simple::Client';
     $opts{handlers}{'riap+pipe'}  //= 'Perinci::Access::Simple::Client';
-
-    my @schemes = keys %{$opts{handlers}};
-    for (@schemes) {
-        next if /\A(riap|pl|http|https|riap\+tcp|riap\+unix|riap\+pipe)\z/;
-        $log->warnf("Unknown Riap scheme %s", $_);
-    }
 
     $opts{_handler_objs}          //= {};
     bless \%opts, $class;
@@ -47,16 +41,17 @@ sub _request_or_parse_url {
     }
 
     my ($sch, $auth, $path, $query, $frag) = uri_split($uri);
-    $sch //= "pl";
+    $sch //= "";
     die "Can't handle scheme '$sch' in URL" unless $self->{handlers}{$sch};
 
-    # convert riap:// to / as InProcess only accepts hostless path or pl:/foo
+    # convert riap://perl/Foo/Bar to pl:/Foo/Bar/ as Perl only accepts pl
     if ($sch eq 'riap') {
         $auth //= '';
         die "Unsupported auth '$auth' in riap: scheme, ".
             "only 'perl' is supported" unless $auth eq 'perl';
         $sch = 'pl';
-        $uri = uri_join("pl", undef, $path);
+        $auth = undef;
+        $uri = uri_join($sch, $auth, $path, $query, $frag);
     }
 
     unless ($self->{_handler_objs}{$sch}) {
@@ -114,7 +109,7 @@ Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 SYNOPSIS
 
@@ -125,10 +120,10 @@ version 0.35
 
  ### launching Riap request
 
- # use Perinci::Access::InProcess
+ # use Perinci::Access::Perl
  $res = $pa->request(call => "pl:/Mod/SubMod/func");
 
- # ditto
+ # use Perinci::Access::Schemeless
  $res = $pa->request(call => "/Mod/SubMod/func");
 
  # use Perinci::Access::HTTP::Client
@@ -152,11 +147,11 @@ version 0.35
 =head1 DESCRIPTION
 
 This module provides a convenient wrapper to select appropriate Riap client
-(Perinci::Access::*) objects based on URI scheme (or lack thereof).
+(Perinci::Access::*) objects based on URI scheme.
 
- riap://perl/Foo/Bar/  -> Perinci::Access::InProcess
- /Foo/Bar/             -> Perinci::Access::InProcess
- pl:/Foo/Bar           -> Perinci::Access::InProcess
+ /Foo/Bar/             -> Perinci::Access::Schemeless
+ pl:/Foo/Bar           -> Perinci::Access::Perl
+ riap://perl/Foo/Bar/  -> Perinci::Access::Perl (converted to pl:/Foo/Bar/)
  http://...            -> Perinci::Access::HTTP::Client
  https://...           -> Perinci::Access::HTTP::Client
  riap+tcp://...        -> Perinci::Access::Simple::Client
@@ -194,8 +189,8 @@ A mapping of scheme names and class names or objects. If values are class names,
 they will be require'd and instantiated. The default is:
 
  {
-   riap         => 'Perinci::Access::InProcess',
-   pl           => 'Perinci::Access::InProcess',
+   ''           => 'Perinci::Access::Schemeless',
+   pl           => 'Perinci::Access::Perl',
    http         => 'Perinci::Access::HTTP::Client',
    https        => 'Perinci::Access::HTTP::Client',
    'riap+tcp'   => 'Perinci::Access::Simple::Client',
@@ -256,7 +251,9 @@ LOG_RIAP_RESPONSE
 
 =head1 SEE ALSO
 
-L<Perinci::Access::InProcess>
+L<Perinci::Access::Schemeless>
+
+L<Perinci::Access::Perl>
 
 L<Perinci::Access::HTTP::Client>
 
