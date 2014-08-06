@@ -2,7 +2,8 @@ NAME
     Perinci::Access - Wrapper for Perinci Riap clients
 
 VERSION
-    version 0.36
+    This document describes version 0.37 of Perinci::Access (from Perl
+    distribution Perinci-Access), released on 2014-08-06.
 
 SYNOPSIS
      use Perinci::Access;
@@ -93,22 +94,22 @@ METHODS
 
         Arguments to pass to handler objects' constructors.
 
-  $pa->request($action, $server_url, \%extra, \%copts) -> RESP
+  $pa->request($action, $server_url[, \%extra_keys[, \%client_opts]]) -> RESP
     Send Riap request to Riap server. Pass the request to the appropriate
     Riap client (as configured in "handlers" constructor options). RESP is
     the enveloped result.
 
-    %extra is optional, containing Riap request keys (the "action" request
-    key is taken from $action).
+    %extra_keys is optional, containing Riap request keys (the "action"
+    request key is taken from $action).
 
-    %copts is optional, containing Riap-client-specific options. For
+    %client_opts is optional, containing Riap-client-specific options. For
     example, to pass HTTP credentials to "Perinci::Access::HTTP::Client",
     you can do:
 
      $pa->request(call => 'http://example.com/Foo/bar', {args=>{a=>1}},
                   {user=>'admin', password=>'secret'});
 
-  $pa->parse_url($server_url) => HASH
+  $pa->parse_url($server_url[, \%client_opts]) => HASH
     Parse $server_url into its components. Will be done by respective
     subclasses. Die on failure (e.g. invalid URL). Return a hash on success,
     containing at least these keys:
@@ -139,11 +140,26 @@ SEE ALSO
 
     Perinci::Access::Simple::Client
 
+HOMEPAGE
+    Please visit the project's homepage at
+    <https://metacpan.org/release/Perinci-Access>.
+
+SOURCE
+    Source repository is at
+    <https://github.com/sharyanto/perl-Perinci-Access>.
+
+BUGS
+    Please report any bugs or feature requests on the bugtracker website
+    <https://rt.cpan.org/Public/Dist/Display.html?Name=Perinci-Access>
+
+    When submitting a bug or request, please include a test-file or a patch
+    to an existing test-file that illustrates the bug or desired feature.
+
 AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2013 by Steven Haryanto.
+    This software is copyright (c) 2014 by Steven Haryanto.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

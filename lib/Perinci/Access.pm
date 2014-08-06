@@ -1,5 +1,8 @@
 package Perinci::Access;
 
+our $DATE = '2014-08-06'; # DATE
+our $VERSION = '0.37'; # VERSION
+
 use 5.010001;
 use strict;
 use warnings;
@@ -10,8 +13,6 @@ use URI::Split qw(uri_split uri_join);
 
 our $Log_Request  = $ENV{LOG_RIAP_REQUEST}  // 0;
 our $Log_Response = $ENV{LOG_RIAP_RESPONSE} // 0;
-
-our $VERSION = '0.36'; # VERSION
 
 sub new {
     my ($class, %opts) = @_;
@@ -37,7 +38,7 @@ sub _request_or_parse_url {
     if ($which eq 'request') {
         ($action, $uri, $extra, $copts) = @_;
     } else {
-        ($uri) = @_;
+        ($uri, $copts) = @_;
     }
 
     my ($sch, $auth, $path, $query, $frag) = uri_split($uri);
@@ -81,7 +82,7 @@ sub _request_or_parse_url {
             $log->tracef("Riap response: %s", $res);
         }
     } else {
-        $res = $self->{_handler_objs}{$sch}->parse_url($uri);
+        $res = $self->{_handler_objs}{$sch}->parse_url($uri, $copts);
     }
     $res;
 }
@@ -103,13 +104,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-version 0.36
+This document describes version 0.37 of Perinci::Access (from Perl distribution Perinci-Access), released on 2014-08-06.
 
 =head1 SYNOPSIS
 
@@ -207,22 +210,23 @@ Arguments to pass to handler objects' constructors.
 
 =back
 
-=head2 $pa->request($action, $server_url, \%extra, \%copts) -> RESP
+=head2 $pa->request($action, $server_url[, \%extra_keys[, \%client_opts]]) -> RESP
 
 Send Riap request to Riap server. Pass the request to the appropriate Riap
 client (as configured in C<handlers> constructor options). RESP is the enveloped
 result.
 
-C<%extra> is optional, containing Riap request keys (the C<action> request key
- is taken from C<$action>).
+C<%extra_keys> is optional, containing Riap request keys (the C<action> request
+ key is taken from C<$action>).
 
-C<%copts> is optional, containing Riap-client-specific options. For example, to
-pass HTTP credentials to C<Perinci::Access::HTTP::Client>, you can do:
+C<%client_opts> is optional, containing Riap-client-specific options. For
+example, to pass HTTP credentials to C<Perinci::Access::HTTP::Client>, you can
+do:
 
  $pa->request(call => 'http://example.com/Foo/bar', {args=>{a=>1}},
               {user=>'admin', password=>'secret'});
 
-=head2 $pa->parse_url($server_url) => HASH
+=head2 $pa->parse_url($server_url[, \%client_opts]) => HASH
 
 Parse C<$server_url> into its components. Will be done by respective subclasses.
 Die on failure (e.g. invalid URL). Return a hash on success, containing at least
@@ -259,13 +263,29 @@ L<Perinci::Access::HTTP::Client>
 
 L<Perinci::Access::Simple::Client>
 
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Perinci-Access>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Perinci-Access>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website L<https://rt.cpan.org/Public/Dist/Display.html?Name=Perinci-Access>
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
 =head1 AUTHOR
 
 Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Steven Haryanto.
+This software is copyright (c) 2014 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
