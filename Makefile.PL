@@ -11,7 +11,7 @@ use ExtUtils::MakeMaker 6.30;
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Wrapper for Perinci Riap clients",
-  "AUTHOR" => "Steven Haryanto <stevenharyanto\@gmail.com>",
+  "AUTHOR" => "perlancar <perlancar\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
   },
@@ -27,6 +27,7 @@ my %WriteMakefileArgs = (
     "Perinci::Access::Perl" => 0,
     "Perinci::Access::Schemeless" => 0,
     "Perinci::Access::Simple::Client" => "0.13",
+    "Rinci" => "v1.1.0",
     "URI::Split" => 0
   },
   "TEST_REQUIRES" => {
@@ -36,7 +37,7 @@ my %WriteMakefileArgs = (
     "Perinci::Examples" => 0,
     "Test::More" => "0.96"
   },
-  "VERSION" => "0.37",
+  "VERSION" => "0.38",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -53,6 +54,7 @@ my %FallbackPrereqs = (
   "Perinci::Access::Schemeless" => 0,
   "Perinci::Access::Simple::Client" => "0.13",
   "Perinci::Examples" => 0,
+  "Rinci" => "v1.1.0",
   "Test::More" => "0.96",
   "URI::Split" => 0
 );

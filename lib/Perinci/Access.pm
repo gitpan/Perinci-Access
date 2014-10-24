@@ -1,7 +1,7 @@
 package Perinci::Access;
 
-our $DATE = '2014-08-06'; # DATE
-our $VERSION = '0.37'; # VERSION
+our $DATE = '2014-10-24'; # DATE
+our $VERSION = '0.38'; # VERSION
 
 use 5.010001;
 use strict;
@@ -17,6 +17,7 @@ our $Log_Response = $ENV{LOG_RIAP_RESPONSE} // 0;
 sub new {
     my ($class, %opts) = @_;
 
+    $opts{riap_version}           //= 1.1;
     $opts{handlers}               //= {};
     $opts{handlers}{''}           //= 'Perinci::Access::Schemeless';
     $opts{handlers}{pl}           //= 'Perinci::Access::Perl';
@@ -64,6 +65,7 @@ sub _request_or_parse_url {
             require $modp;
             #$log->tracef("TMP: Creating Riap client object for schema %s with args %s", $sch, $self->{handler_args});
             $self->{_handler_objs}{$sch} = $self->{handlers}{$sch}->new(
+                riap_version => $self->{riap_version},
                 %{ $self->{handler_args} // {}});
         }
     }
@@ -112,7 +114,7 @@ Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-This document describes version 0.37 of Perinci::Access (from Perl distribution Perinci-Access), released on 2014-08-06.
+This document describes version 0.38 of Perinci::Access (from Perl distribution Perinci-Access), released on 2014-10-24.
 
 =head1 SYNOPSIS
 
@@ -269,7 +271,7 @@ Please visit the project's homepage at L<https://metacpan.org/release/Perinci-Ac
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/sharyanto/perl-Perinci-Access>.
+Source repository is at L<https://github.com/perlancar/perl-Perinci-Access>.
 
 =head1 BUGS
 
@@ -281,11 +283,11 @@ feature.
 
 =head1 AUTHOR
 
-Steven Haryanto <stevenharyanto@gmail.com>
+perlancar <perlancar@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Steven Haryanto.
+This software is copyright (c) 2014 by perlancar@cpan.org.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -4,7 +4,7 @@ use 5.010;
 use strict;
 use warnings;
 
-our $VERSION = '0.37'; # VERSION
+our $VERSION = '0.38'; # VERSION
 
 # we do this because we can't state Perinci::CmdLine as prerequisite, circular
 eval { require Perinci::CmdLine };
@@ -129,7 +129,7 @@ peri-access - Command-line Riap client
 
 =head1 VERSION
 
-This document describes version 0.37 of peri-access (from Perl distribution Perinci-Access), released on 2014-08-06.
+This document describes version 0.38 of peri-access (from Perl distribution Perinci-Access), released on 2014-10-24.
 
 =head1 SYNOPSIS
 
@@ -148,7 +148,7 @@ Please visit the project's homepage at L<https://metacpan.org/release/Perinci-Ac
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/sharyanto/perl-Perinci-Access>.
+Source repository is at L<https://github.com/perlancar/perl-Perinci-Access>.
 
 =head1 BUGS
 
@@ -160,11 +160,11 @@ feature.
 
 =head1 AUTHOR
 
-Steven Haryanto <stevenharyanto@gmail.com>
+perlancar <perlancar@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Steven Haryanto.
+This software is copyright (c) 2014 by perlancar@cpan.org.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

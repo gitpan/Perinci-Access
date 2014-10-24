@@ -1,5 +1,10 @@
 Revision history for Perinci-Access
 
+0.38    2014-10-24 (PERLANCAR)
+
+	- Add attribute: riap_version.
+
+
 0.37     2014-08-06 (SHARYANTO)
 
          - Allow passing %client_opts in parse_url(), because some handlers like
