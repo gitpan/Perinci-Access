@@ -1,7 +1,7 @@
 package Perinci::Access;
 
 our $DATE = '2014-10-24'; # DATE
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 use 5.010001;
 use strict;
@@ -114,7 +114,7 @@ Perinci::Access - Wrapper for Perinci Riap clients
 
 =head1 VERSION
 
-This document describes version 0.38 of Perinci::Access (from Perl distribution Perinci-Access), released on 2014-10-24.
+This document describes version 0.39 of Perinci::Access (from Perl distribution Perinci-Access), released on 2014-10-24.
 
 =head1 SYNOPSIS
 
@@ -271,7 +271,7 @@ Please visit the project's homepage at L<https://metacpan.org/release/Perinci-Ac
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/perlancar/perl-Perinci-Access>.
+Source repository is at L<https://github.com/sharyanto/perl-Perinci-Access>.
 
 =head1 BUGS
 

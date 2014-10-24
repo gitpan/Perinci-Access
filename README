@@ -2,7 +2,7 @@ NAME
     Perinci::Access - Wrapper for Perinci Riap clients
 
 VERSION
-    This document describes version 0.38 of Perinci::Access (from Perl
+    This document describes version 0.39 of Perinci::Access (from Perl
     distribution Perinci-Access), released on 2014-10-24.
 
 SYNOPSIS
@@ -146,7 +146,7 @@ HOMEPAGE
 
 SOURCE
     Source repository is at
-    <https://github.com/perlancar/perl-Perinci-Access>.
+    <https://github.com/sharyanto/perl-Perinci-Access>.
 
 BUGS
     Please report any bugs or feature requests on the bugtracker website
